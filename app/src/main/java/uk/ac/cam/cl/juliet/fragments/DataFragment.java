@@ -19,10 +19,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.microsoft.graph.core.exceptions.ClientException;
-import com.microsoft.graph.concurrency.ICallback;
-import com.microsoft.graph.beta.models.DriveItem;
-import com.microsoft.identity.client.MsalClientException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,8 +30,6 @@ import uk.ac.cam.cl.juliet.adapters.FilesListAdapter;
 import uk.ac.cam.cl.juliet.computationengine.Burst;
 import uk.ac.cam.cl.juliet.connection.ConnectionSimulator;
 import uk.ac.cam.cl.juliet.data.AuthenticationManager;
-import uk.ac.cam.cl.juliet.data.DriveAnalysisCallback;
-import uk.ac.cam.cl.juliet.data.GraphServiceController;
 import uk.ac.cam.cl.juliet.data.InternalDataHandler;
 import uk.ac.cam.cl.juliet.models.SingleOrManyBursts;
 
@@ -183,12 +177,7 @@ public class DataFragment extends Fragment
         builder.setTitle(titleRes);
         builder.setMessage(messageRes);
         boolean signedIn;
-        try {
-            signedIn = AuthenticationManager.getInstance().isUserLoggedIn();
-        } catch (MsalClientException e) {
-            e.printStackTrace();
-            signedIn = false;
-        }
+        signedIn = AuthenticationManager.getInstance().isUserLoggedIn();
         DialogInterface.OnClickListener deleteListener =
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -378,49 +367,12 @@ public class DataFragment extends Fragment
     /** Uploads the unsynced files in the directory */
     public void uploadUnsyncedFiles() throws IOException {
         final InternalDataHandler idh = InternalDataHandler.getInstance();
-        final GraphServiceController gsc = new GraphServiceController();
         uploadFiles();
     }
 
     /** A method for beginning to upload all of the files to One Drive */
     private void uploadFiles() {
-        final InternalDataHandler idh = InternalDataHandler.getInstance();
-        final GraphServiceController gsc = new GraphServiceController();
-        // TODO: Maybe batch these for performance issues
-        for (final SingleOrManyBursts singleOrMany : filesList) {
-            if (singleOrMany.getIsSingleBurst()) {
-                try {
-                    gsc.uploadDatafile(
-                            idh.getRelativeFromAbsolute(singleOrMany.getFile().getAbsolutePath()),
-                            idh.getRelativeFromAbsolute(currentDirectory.getAbsolutePath()),
-                            idh.convertToBytes(singleOrMany.getFile()),
-                            new ICallback<DriveItem>() {
-                                @Override
-                                public void success(DriveItem driveItem) {
-                                    singleOrMany.setSyncStatus(true);
-                                    adapter.notifyDataSetChanged();
-                                }
 
-                                @Override
-                                public void failure(ClientException ex) {
-                                    Context context = getContext();
-                                    if (context != null) {
-                                        Toast.makeText(
-                                                        context,
-                                                        "Failed to upload: "
-                                                                + singleOrMany.getNameToDisplay(),
-                                                        Toast.LENGTH_LONG)
-                                                .show();
-                                    }
-
-                                    ex.printStackTrace();
-                                }
-                            });
-                } catch (IOException io) {
-                    io.printStackTrace();
-                }
-            }
-        }
     }
 
     @Override
@@ -449,23 +401,6 @@ public class DataFragment extends Fragment
 
     /** Asynchronously reloads and synchronously redraws the list of files. */
     public void refreshFiles() {
-        if (!isNetworkConnected()) {
-            try {
-                AuthenticationManager auth = AuthenticationManager.getInstance();
-                if (auth.isUserLoggedIn()) {
-                    AuthenticationManager.getInstance().disconnect();
-                    listener.notifyNoInternet();
-                    Toast.makeText(getContext(), "No Internet Connection", Toast.LENGTH_SHORT)
-                            .show();
-                }
-                Context context = getContext();
-                if (context != null) {
-                    Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }
-            } catch (MsalClientException ex) {
-                ex.printStackTrace();
-            }
-        }
 
         if (!checkingSync) {
             checkingSync = true;
@@ -480,21 +415,7 @@ public class DataFragment extends Fragment
 
     /** Check to see if the current directory's files are synced */
     private void areFilesSynced() throws FileNotFoundException {
-        final InternalDataHandler idh = InternalDataHandler.getInstance();
-        GraphServiceController gsc = new GraphServiceController();
-        // Iterate over the files and if they're in the current directory then set sync status
-        for (SingleOrManyBursts single : filesList) {
-            if (single.getIsSingleBurst()) {
-                if (idh.getSyncedFiles()
-                        .contains(
-                                idh.getRelativeFromAbsolute(single.getFile().getAbsolutePath()))) {
-                    single.setSyncStatus(true);
-                }
-            }
-        }
-        gsc.getFolder(
-                idh.getRelativeFromAbsolute(currentDirectory.getAbsolutePath()),
-                new DriveAnalysisCallback(currentDirectory, this, filesList, adapter));
+
     }
 
     /** Handles reloading and redrawing the list of files. */
@@ -545,18 +466,6 @@ public class DataFragment extends Fragment
             dataFragment.setNoFilesMessageVisibility(dataFragment.filesList.isEmpty());
             dataFragment.loadingFilesSpinner.setVisibility(View.INVISIBLE);
             dataFragment.filesRecyclerView.setVisibility(View.VISIBLE);
-            try {
-                AuthenticationManager auth = AuthenticationManager.getInstance();
-                // If the user is logged in and the authentication result isn't null
-                if (auth.isUserLoggedIn() && auth.getAuthResult() != null) {
-                    // Check to see if the files of the currentDirectory are synced
-                    dataFragment.areFilesSynced();
-                }
-            } catch (FileNotFoundException ex) {
-                ex.printStackTrace();
-            } catch (MsalClientException e) {
-                e.printStackTrace();
-            }
         }
     }
 

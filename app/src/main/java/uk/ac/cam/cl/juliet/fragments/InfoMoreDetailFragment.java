@@ -124,7 +124,7 @@ public class InfoMoreDetailFragment extends Fragment
                 };
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
-                        getContext(), R.layout.support_simple_spinner_dropdown_item, datatypes);
+                        getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, datatypes);
         detailedSpinner.setAdapter(adapter);
 
         // Set the spinners listener

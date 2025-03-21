@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.microsoft.identity.client.MsalClientException;
 import java.util.List;
 import uk.ac.cam.cl.juliet.R;
-import uk.ac.cam.cl.juliet.data.AuthenticationManager;
 import uk.ac.cam.cl.juliet.models.SingleOrManyBursts;
 
 /** Adapts a list of files into the RecyclerView in DataFragment. */
@@ -87,28 +85,12 @@ public class FilesListAdapter extends RecyclerView.Adapter<FilesListAdapter.File
         }
 
         // Determine if logged in and show/hide the "is uploaded" icon
-        boolean loggedIn = false;
-        try {
-            loggedIn = AuthenticationManager.getInstance().isUserLoggedIn();
-        } catch (MsalClientException e) {
-            e.printStackTrace();
-        }
+        boolean loggedIn = true;
 
         // Decide whether to show the sync status indicator: this will only be done if the user
         // is logged in, and will only be shown for files (not folders).
         boolean showSyncStatus = loggedIn && file.getIsSingleBurst();
         filesListViewHolder.setSyncStatusVisibility(showSyncStatus);
-        if (showSyncStatus) {
-            if (file.getSyncStatus()) {
-                filesListViewHolder
-                        .getSyncStatusImageView()
-                        .setImageResource(R.drawable.baseline_cloud_done_black_18);
-            } else {
-                filesListViewHolder
-                        .getSyncStatusImageView()
-                        .setImageResource(R.drawable.baseline_cloud_off_black_18);
-            }
-        }
 
         // Set the corresponding image to show whether the file has been uploaded.
         filesListViewHolder.setUploaded(file.getSyncStatus());

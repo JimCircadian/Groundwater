@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
-import com.microsoft.identity.client.PublicClientApplication;
 import java.util.ArrayList;
 import java.util.List;
 import uk.ac.cam.cl.juliet.R;
@@ -101,10 +100,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        PublicClientApplication clientApp = AuthenticationManager.getInstance().getPublicClient();
-        if (clientApp != null) {
-            clientApp.handleInteractiveRequestRedirect(requestCode, resultCode, data);
-        }
     }
 
     /**
