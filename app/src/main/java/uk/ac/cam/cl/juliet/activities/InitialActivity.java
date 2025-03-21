@@ -22,22 +22,8 @@ public class InitialActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent;
-        if (alreadyHasPermissions()) {
-            intent = new Intent(this, MainActivity.class);
-        } else {
-            intent = new Intent(this, RequestPermissionsActivity.class);
-        }
+        intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    /**
-     * Determines whether the user has already given file access permissions.
-     *
-     * @return true if the user already has given permission; false otherwise
-     */
-    private boolean alreadyHasPermissions() {
-        return (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED);
     }
 }

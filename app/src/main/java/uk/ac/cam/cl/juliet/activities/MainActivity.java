@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import uk.ac.cam.cl.juliet.R;
 import uk.ac.cam.cl.juliet.connection.ConnectionSimulator;
-import uk.ac.cam.cl.juliet.data.AuthenticationManager;
 import uk.ac.cam.cl.juliet.fragments.DataFragmentWrapper;
 import uk.ac.cam.cl.juliet.fragments.DisplayFragment;
 import uk.ac.cam.cl.juliet.fragments.SettingsFragment;

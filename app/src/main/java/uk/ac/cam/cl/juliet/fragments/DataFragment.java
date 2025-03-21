@@ -256,7 +256,7 @@ public class DataFragment extends Fragment
     private boolean getEligibleForPlottingAllFiles() {
         InternalDataHandler idh = InternalDataHandler.getInstance();
         if (idh.getProcessingData()) return false;
-        if (filesList.isEmpty()) return false;
+        if (filesList == null || filesList.isEmpty()) return false;
         if (currentNode == null) return false;
         boolean eligible = true;
         for (SingleOrManyBursts file : filesList) {
@@ -270,7 +270,7 @@ public class DataFragment extends Fragment
      * accordingly.
      */
     private void updatePlotAllFilesButtonEnabled() {
-        plotAllFilesButton.setEnabled(getEligibleForPlottingAllFiles());
+        // plotAllFilesButton.setEnabled(getEligibleForPlottingAllFiles());
     }
 
     /** Shows a dialog message to confirm whether a file or folder should be deleted. */
@@ -442,28 +442,33 @@ public class DataFragment extends Fragment
 
         @Override
         protected Void doInBackground(Void... voids) {
-            dataFragment.filesList.clear();
-            if (!folder.isFile()) {
-                for (File file : folder.listFiles()) {
-                    SingleOrManyBursts inner;
-                    if (file.isFile()) {
-                        inner = new SingleOrManyBursts((Burst) null, file, false);
-                    } else {
-                        inner =
-                                new SingleOrManyBursts(
-                                        (ArrayList<SingleOrManyBursts>) null, file, false);
+            if (dataFragment.filesList != null) {
+                dataFragment.filesList.clear();
+            }
+            if (folder != null && !folder.isFile()) {
+                File[] fileList = folder.listFiles();
+                if (fileList != null) {
+                    for (File file : fileList) {
+                        SingleOrManyBursts inner;
+                        if (file.isFile()) {
+                            inner = new SingleOrManyBursts((Burst) null, file, false);
+                        } else {
+                            inner =
+                                    new SingleOrManyBursts(
+                                            (ArrayList<SingleOrManyBursts>) null, file, false);
+                        }
+                        dataFragment.filesList.add(inner);
                     }
-                    dataFragment.filesList.add(inner);
-                }
+
             } // TODO: Throw exception if attempt to load files from a file??
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            dataFragment.updatePlotAllFilesButtonEnabled();
-            dataFragment.adapter.notifyDataSetChanged();
-            dataFragment.setNoFilesMessageVisibility(dataFragment.filesList.isEmpty());
+            // dataFragment.updatePlotAllFilesButtonEnabled();
+            // dataFragment.adapter.notifyDataSetChanged();
+            dataFragment.setNoFilesMessageVisibility(dataFragment.filesList == null || dataFragment.filesList.isEmpty());
             dataFragment.loadingFilesSpinner.setVisibility(View.INVISIBLE);
             dataFragment.filesRecyclerView.setVisibility(View.VISIBLE);
         }

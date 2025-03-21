@@ -26,14 +26,14 @@ public class RequestPermissionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_permissions);
-        Button updatePermissionsButton = findViewById(R.id.updatePermissionsButton);
+        /*Button updatePermissionsButton = findViewById(R.id.updatePermissionsButton);
         updatePermissionsButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        performRequestPermissions();
+                        // performRequestPermissions();
                     }
-                });
+                });*/
         performRequestPermissions();
     }
 
@@ -50,26 +50,22 @@ public class RequestPermissionsActivity extends AppCompatActivity {
      * <p>If we do not have the requested permissions then a dialog will be shown to the user.
      */
     private void performRequestPermissions() {
-        ActivityCompat.requestPermissions(
+        /*ActivityCompat.requestPermissions(
                 this,
                 new String[] {
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_NETWORK_STATE,
-                    Manifest.permission.INTERNET
+                    // Manifest.permission.READ_EXTERNAL_STORAGE,
+                    // Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    //Manifest.permission.ACCESS_NETWORK_STATE,
+                    //Manifest.permission.INTERNET
                 },
-                REQUEST_CODE);
+                REQUEST_CODE);*/
     }
 
     @Override
     public void onRequestPermissionsResult(
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startMainActivity();
-                }
+        if (requestCode == REQUEST_CODE) {
+            startMainActivity();
         }
     }
 }

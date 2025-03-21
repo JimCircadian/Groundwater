@@ -121,16 +121,7 @@ public class DataFragmentWrapper extends Fragment
 
     private String getRootPath() {
         InternalDataHandler idh = InternalDataHandler.getInstance();
-        Activity activity = getActivity();
-        String path = null;
-        if (activity != null
-                && ContextCompat.checkSelfPermission(
-                                activity, Manifest.permission.READ_EXTERNAL_STORAGE)
-                        == PackageManager.PERMISSION_GRANTED) {
-            path = idh.getRoot().getAbsolutePath();
-        } else {
-            // TODO: Show error message; we failed to get permissions
-        }
+        String path = idh.getRoot().getAbsolutePath();
         return path;
     }
 
