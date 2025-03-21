@@ -1,7 +1,7 @@
 package uk.ac.cam.cl.juliet.data;
 
 import android.app.Application;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 
 /** For passing the contexts around */
 public class Connect extends Application {
