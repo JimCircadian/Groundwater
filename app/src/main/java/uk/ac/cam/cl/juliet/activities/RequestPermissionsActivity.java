@@ -50,15 +50,13 @@ public class RequestPermissionsActivity extends AppCompatActivity {
      * <p>If we do not have the requested permissions then a dialog will be shown to the user.
      */
     private void performRequestPermissions() {
-        /*ActivityCompat.requestPermissions(
+        ActivityCompat.requestPermissions(
                 this,
                 new String[] {
-                    // Manifest.permission.READ_EXTERNAL_STORAGE,
-                    // Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    //Manifest.permission.ACCESS_NETWORK_STATE,
-                    //Manifest.permission.INTERNET
+                    Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE,
                 },
-                REQUEST_CODE);*/
+                REQUEST_CODE);
     }
 
     @Override

@@ -69,6 +69,7 @@ public class PlotDataGenerator2D {
 
     /** Computes data for time, amplitude and phase plots. */
     private void computePlotData() {
+        // FIXME: yValues are not rendering correctly for this
         RangeResult rangeResult = Range.computeRange(burst, padding, maxrange, win);
         List<Double> xValues;
         List<Double> yValues;

@@ -169,6 +169,7 @@ public class InfoOverviewFragment extends Fragment implements Spinner.OnItemSele
                 }
 
                 // Choose the correct data to visualise
+                // FIXME: rendering of graphs isn't working properly with some files, producing NaNs
                 BurstDataTypes selected =
                         BurstDataTypes.fromString((String) overviewSpinner.getSelectedItem());
                 if (selected == BurstDataTypes.AMPLITUDE) {

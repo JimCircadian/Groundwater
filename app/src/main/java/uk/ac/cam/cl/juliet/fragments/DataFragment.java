@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AlertDialog;
@@ -270,7 +271,7 @@ public class DataFragment extends Fragment
      * accordingly.
      */
     private void updatePlotAllFilesButtonEnabled() {
-        // plotAllFilesButton.setEnabled(getEligibleForPlottingAllFiles());
+        plotAllFilesButton.setEnabled(getEligibleForPlottingAllFiles());
     }
 
     /** Shows a dialog message to confirm whether a file or folder should be deleted. */
@@ -459,15 +460,15 @@ public class DataFragment extends Fragment
                         }
                         dataFragment.filesList.add(inner);
                     }
-
+                }
             } // TODO: Throw exception if attempt to load files from a file??
             return null;
         }
 
         @Override
         protected void onPostExecute(Void result) {
-            // dataFragment.updatePlotAllFilesButtonEnabled();
-            // dataFragment.adapter.notifyDataSetChanged();
+            dataFragment.updatePlotAllFilesButtonEnabled();
+            dataFragment.adapter.notifyDataSetChanged();
             dataFragment.setNoFilesMessageVisibility(dataFragment.filesList == null || dataFragment.filesList.isEmpty());
             dataFragment.loadingFilesSpinner.setVisibility(View.INVISIBLE);
             dataFragment.filesRecyclerView.setVisibility(View.VISIBLE);

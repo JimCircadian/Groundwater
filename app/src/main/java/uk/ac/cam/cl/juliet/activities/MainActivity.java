@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
         permissionListeners = new ArrayList<>();
 
         // Get user permission to access file system
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(
                                 this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                     },
                     READ_CONSTANT);
-        }
+        }*/
     }
 
     /**

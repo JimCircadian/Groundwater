@@ -1,6 +1,7 @@
 package uk.ac.cam.cl.juliet.data;
 
 import android.os.Environment;
+import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -73,8 +74,11 @@ public class InternalDataHandler {
             }
         }
         if (appRoot == null) {
+            // TODO: this doesn't work, but false doesn't tell me why
             appRoot = new File(systemRoot, ROOT_NAME);
-            appRoot.mkdir();
+            if (!appRoot.mkdir()) {
+                Log.w(InternalDataHandler.class.getName(), "Could not make folder " + appRoot);
+            }
         }
         return appRoot;
     }
